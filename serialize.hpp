@@ -1,7 +1,6 @@
 #include <iosfwd>
 #include <fstream>
 #include <boost/geometry.hpp>
-#include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 using namespace boost::archive;
@@ -41,17 +40,20 @@ struct helper<P,len,len>{
 
 namespace boost{
     namespace serialization{
+        
         template<typename Archive,typename T, typename C>
         void serialize(Archive & ar,bg::model::d2::point_xy<T,C> & d2pnt, unsigned int fileversion){
             ar &  const_cast<T&> (d2pnt.x());
             ar &  const_cast<T&> (d2pnt.y());
         }
+        
         template<typename Archive, typename T,size_t DIM, typename C>
         void save(Archive & ar, bg::model::segment<bg::model::point<T,DIM,C>> const& p, unsigned int fileversion)
         {
             helper< bg::model::point<T,DIM,C> >::save(ar, p.first, fileversion);//save first point
             helper< bg::model::point<T,DIM,C> >::save(ar, p.second, fileversion);//save second point
         }
+        
         template<typename Archive, typename T,size_t DIM, typename C>
         void load(Archive & ar, bg::model::segment<bg::model::point<T,DIM,C>> & p, unsigned int fileversion)
         {
@@ -64,17 +66,20 @@ namespace boost{
         {
             helper< bg::model::point<T,DIM,C> >::save(ar, point, fileversion);
         }
+        
         template<typename Archive, typename T, size_t DIM, typename C>
         void load(Archive & ar, bg::model::point<T,DIM,C> & point, unsigned int fileversion)
         {
             helper< bg::model::point<T,DIM,C> >::load(ar, point, fileversion);
         }
+        
         template<typename Archive, typename T,size_t DIM, typename C>
         void serialize(Archive & ar,bg::model::box<bg::model::point<T,DIM,C>> & bx, unsigned int fileversion)
         {
             ar & bx.max_corner();
             ar & bx.min_corner();
         }
+        
         template<typename Archive, typename T, size_t DIM, typename C>
         void serialize(Archive & ar, bg::model::point<T,DIM,C> & pnt, unsigned int fileversion)
         {
